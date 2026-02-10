@@ -1,0 +1,20 @@
+CREATE DATABASE IF NOT EXISTS db_dpo_asaf CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE db_dpo_asaf;
+
+CREATE TABLE IF NOT EXISTS modalidade (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    modalidade VARCHAR(120) NOT NULL,
+    mensalidade DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS alunos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    tel VARCHAR(20) NULL,
+    email VARCHAR(120) NOT NULL,
+    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_alunos_nome ON alunos (nome);
+CREATE INDEX idx_modalidade_nome ON modalidade (modalidade);

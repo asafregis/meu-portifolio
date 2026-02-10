@@ -1,0 +1,107 @@
+CREATE DATABASE IF NOT EXISTS controle_academico
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_unicode_ci;
+USE controle_academico;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS matriculas;
+DROP TABLE IF EXISTS turmas;
+DROP TABLE IF EXISTS disciplinas;
+DROP TABLE IF EXISTS cursos;
+DROP TABLE IF EXISTS professores;
+DROP TABLE IF EXISTS alunos;
+
+-- tabelas da versao antiga (caso existam)
+DROP TABLE IF EXISTS aluno_modalidade;
+DROP TABLE IF EXISTS modalidades;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE IF NOT EXISTS alunos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    cpf CHAR(11) NULL,
+    telefone VARCHAR(20) NULL,
+    data_nascimento DATE NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_alunos_email (email),
+    UNIQUE KEY uk_alunos_cpf (cpf)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS professores (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    cpf CHAR(11) NULL,
+    telefone VARCHAR(20) NULL,
+    titulacao VARCHAR(80) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_professores_email (email),
+    UNIQUE KEY uk_professores_cpf (cpf)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cursos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(120) NOT NULL,
+    codigo VARCHAR(20) NOT NULL,
+    carga_horaria INT UNSIGNED NOT NULL,
+    descricao TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_cursos_codigo (codigo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS disciplinas (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    curso_id INT UNSIGNED NOT NULL,
+    nome VARCHAR(120) NOT NULL,
+    codigo VARCHAR(20) NOT NULL,
+    carga_horaria INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_disciplinas_curso_codigo (curso_id, codigo),
+    KEY idx_disciplinas_curso_id (curso_id),
+    CONSTRAINT fk_disciplinas_curso FOREIGN KEY (curso_id)
+        REFERENCES cursos(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS turmas (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    disciplina_id INT UNSIGNED NOT NULL,
+    professor_id INT UNSIGNED NULL,
+    ano YEAR NOT NULL,
+    semestre TINYINT UNSIGNED NOT NULL,
+    turno ENUM('MANHA', 'TARDE', 'NOITE') NULL,
+    sala VARCHAR(20) NULL,
+    vagas INT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_turmas_disciplina_id (disciplina_id),
+    KEY idx_turmas_professor_id (professor_id),
+    CONSTRAINT fk_turmas_disciplina FOREIGN KEY (disciplina_id)
+        REFERENCES disciplinas(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_turmas_professor FOREIGN KEY (professor_id)
+        REFERENCES professores(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT chk_turmas_semestre CHECK (semestre IN (1, 2))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS matriculas (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    aluno_id INT UNSIGNED NOT NULL,
+    turma_id INT UNSIGNED NOT NULL,
+    status ENUM('ATIVA', 'TRANCADA', 'CANCELADA', 'CONCLUIDA') NOT NULL DEFAULT 'ATIVA',
+    data_matricula DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_matriculas_aluno_turma (aluno_id, turma_id),
+    KEY idx_matriculas_aluno_id (aluno_id),
+    KEY idx_matriculas_turma_id (turma_id),
+    CONSTRAINT fk_matriculas_aluno FOREIGN KEY (aluno_id)
+        REFERENCES alunos(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_matriculas_turma FOREIGN KEY (turma_id)
+        REFERENCES turmas(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

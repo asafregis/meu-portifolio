@@ -1,0 +1,207 @@
+:root {
+    --bg-base: #f8f4ee;
+    --bg-accent: #eef6f3;
+    --ink: #1f2933;
+    --muted: #6b7280;
+    --primary: #1b8f6d;
+    --primary-dark: #146c53;
+    --accent: #f4a259;
+    --card: #ffffff;
+    --border: rgba(27, 143, 109, 0.18);
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 20% 10%, rgba(27, 143, 109, 0.12), transparent 35%),
+        radial-gradient(circle at 80% 0%, rgba(244, 162, 89, 0.12), transparent 32%),
+        linear-gradient(140deg, var(--bg-base), var(--bg-accent));
+}
+
+.app-nav {
+    background: linear-gradient(120deg, #1b8f6d, #155b52);
+    box-shadow: 0 16px 30px rgba(27, 143, 109, 0.22);
+}
+
+.app-nav .brand-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+}
+
+.app-nav .active > a {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+}
+
+.page-hero {
+    padding: 34px 0 22px;
+    background: linear-gradient(120deg, rgba(27, 143, 109, 0.12), rgba(21, 91, 82, 0.08));
+    border-bottom: 1px solid var(--border);
+}
+
+.page-hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    margin: 0 0 6px;
+    color: var(--ink);
+}
+
+.page-hero p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.section {
+    margin-top: 12px;
+}
+
+.panel-card {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(31, 41, 55, 0.08);
+}
+
+.card-title {
+    font-family: 'Fraunces', serif;
+    color: var(--ink);
+}
+
+.stat-card {
+    display: block;
+    color: inherit;
+    transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 26px 48px rgba(31, 41, 55, 0.12);
+}
+
+.stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(27, 143, 109, 0.12);
+    color: var(--primary-dark);
+}
+
+.stat-count {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.stat-label {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.btn {
+    background-color: var(--primary);
+    border-radius: 999px;
+    padding: 0 26px;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.input-field input:focus + label,
+.input-field input:focus,
+.input-field textarea:focus + label,
+.input-field textarea:focus {
+    color: var(--primary) !important;
+    border-bottom: 1px solid var(--primary) !important;
+    box-shadow: 0 1px 0 0 var(--primary) !important;
+}
+
+.select-dropdown.dropdown-content li > span {
+    color: var(--ink);
+}
+
+table.striped > tbody > tr:nth-child(odd),
+table.highlight > tbody > tr:hover {
+    background-color: rgba(27, 143, 109, 0.06);
+}
+
+.muted-text {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-top: 3px;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0 22px;
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.inline-form {
+    display: inline-flex;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(27, 143, 109, 0.12);
+    color: var(--primary-dark);
+}
+
+.status-pill.is-inactive {
+    background: rgba(148, 163, 184, 0.25);
+    color: #475569;
+}
+
+.total-preview {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.footer-lite {
+    background: transparent;
+    color: var(--muted);
+    box-shadow: none;
+}
+
+.footer-inner {
+    padding: 18px 0;
+}
+
+@media (max-width: 600px) {
+    .page-hero h1 {
+        font-size: 1.9rem;
+    }
+}
